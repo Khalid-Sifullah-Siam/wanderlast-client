@@ -7,10 +7,7 @@ const ALlDestinationsPage = async() => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/destinations`, {
         cache: "no-store",
     });
-    if (!res.ok) {
-        throw new Error(`Failed to fetch destinations: ${res.status}`);
-    }
-    const destinations = await res.json();
+    const destinations = res.ok ? await res.json() : [];
     
 
     return (
@@ -20,7 +17,9 @@ const ALlDestinationsPage = async() => {
 
 <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 ">
             {
-                destinations.map((destination) => <DestinationCard key={destination._id} destination={destination} />)
+                destinations.length > 0 ? destinations.map((destination) => <DestinationCard key={destination._id} destination={destination} />) : (
+                    <p className="text-muted">No destinations found.</p>
+                )
             }
             </div>
 

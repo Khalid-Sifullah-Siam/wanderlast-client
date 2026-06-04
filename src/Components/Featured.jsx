@@ -8,10 +8,7 @@ const Featured = async() => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/featured-destinations`, {
         cache: "no-store",
     });
-    if (!res.ok) {
-        throw new Error(`Failed to fetch featured destinations: ${res.status}`);
-    }
-    const destinations = await res.json();
+    const destinations = res.ok ? await res.json() : [];
     return (
         <div className="space-y-4 py-20 text-center">
             <h1 className="text-6xl">Featured Destinations</h1>
@@ -19,7 +16,9 @@ const Featured = async() => {
 
 <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {
-                destinations.map((destination) => <DestinationCard key={destination._id} destination={destination} />)
+                destinations.length > 0 ? destinations.map((destination) => <DestinationCard key={destination._id} destination={destination} />) : (
+                    <p className="text-muted">No featured destinations found.</p>
+                )
             }
             </div>
 
