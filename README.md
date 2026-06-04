@@ -24,7 +24,9 @@ Check out the live project: [Github Repository](https://github.com/Khalid-Sifull
 - 🔒 **Secure Authentication**: Robust registration and login system via Better Auth.
 - 🌐 **Social Login**: Seamless Google OAuth integration for quick access.
 - 🗺️ **Destination Discovery**: Browse a wide array of destinations with detailed information.
-- 📅 **Trip Management**: Easily book slots and manage your personal travel itinerary.
+- � **Live Search**: Quickly filter destinations and bookings by typing destination names.
+- ↕️ **Sort Options**: Sort destinations and booking lists alphabetically A-Z or Z-A.
+- �📅 **Trip Management**: Easily book slots and manage your personal travel itinerary.
 - 👤 **User Profile**: Dedicated dashboard to view and update personal travel history.
 - 📱 **Fully Responsive**: Crafted with Tailwind CSS v4 for a pixel-perfect experience on all devices.
 - 🚀 **Modern Tech Stack**: Leveraging Next.js 16 and React 19 for industry-leading performance.
@@ -121,10 +123,10 @@ This project is optimized for deployment on **Vercel**.
 - **React 19 Hooks**: Utilizing new React 19 features for state management and data fetching.
 
 ## 🔮 Future Improvements
-- [ ] Add real-time reviews and ratings for destinations.
-- [ ] Implement a wish-list feature for future trips.
-- [ ] Integrate a payment gateway for direct booking payments.
-- [ ] Add AI-powered travel recommendations.
+- Add real-time reviews and ratings for destinations.
+- Implement a wish-list feature for future trips.
+- Integrate a payment gateway for direct booking payments.
+- Add AI-powered travel recommendations.
 
 ## 👤 Author
 **Khalid Sifullah Siam**
