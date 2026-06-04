@@ -5,12 +5,16 @@ import { Avatar, Button } from "@heroui/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { HiMenu, HiX } from "react-icons/hi";
 
 const Navbar = () => {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  const { data: session, isPending } = authClient.useSession();
+  const user = session?.user;
 
   const navItemsLeft = [
     { href: "/", children: "Home" },
@@ -24,37 +28,36 @@ const Navbar = () => {
     { href: "/signup", children: "Sign Up" },
   ];
 
-  const { data: session } = authClient.useSession();
-
-  const user = session?.user;
-
   const handleDelete = async () => {
     await authClient.signOut();
     router.push("/");
   };
 
+  // Fix for Hydration Mismatch
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const isLoading = isPending || !isClient;
+
   return (
     <>
-      {/* Navbar */}
+      {/* Main Navbar */}
       <div className="flex justify-between items-center p-6 font-bold border-b relative z-50 bg-white">
 
-        {/* Left NavItems - Desktop */}
+        {/* Left Nav - Desktop */}
         <div className="hidden lg:flex items-center gap-6">
-          {navItemsLeft.map((navItemLeft, index) => (
-            <Link href={navItemLeft.href} key={index}>
-              {navItemLeft.children}
+          {navItemsLeft.map((item, index) => (
+            <Link href={item.href} key={index} className="hover:text-primary transition-colors">
+              {item.children}
             </Link>
           ))}
         </div>
 
         {/* Mobile Hamburger */}
         <div className="lg:hidden">
-          <button onClick={() => setMenuOpen(!menuOpen)}>
-            {menuOpen ? (
-              <HiX size={30} />
-            ) : (
-              <HiMenu size={30} />
-            )}
+          <button onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle Menu">
+            {menuOpen ? <HiX size={30} /> : <HiMenu size={30} />}
           </button>
         </div>
 
@@ -62,139 +65,139 @@ const Navbar = () => {
         <Link href="/">
           <Image
             src="/assets/Wanderlast.png"
-            alt="Logo"
+            alt="Wanderlast Logo"
             width={150}
             height={150}
+            priority
           />
         </Link>
 
         {/* Right Side - Desktop */}
         <div className="hidden lg:flex items-center gap-6">
-          {user ? (
+          {isLoading ? (
+            // Skeleton for Hydration Safety
             <div className="flex items-center gap-3">
+              <div className="w-20 h-8 bg-gray-200 animate-pulse rounded-md"></div>
+              <div className="w-8 h-8 bg-gray-200 animate-pulse rounded-full"></div>
+              <div className="w-24 h-8 bg-gray-200 animate-pulse rounded-md"></div>
+            </div>
+          ) : user ? (
+            <div className="flex items-center gap-3">
+              <Link href="/profile" className="hover:text-primary transition-colors">
+                Profile
+              </Link>
 
-              <Link href='/profile'>Profile</Link>
-
-              <Avatar>
+              <Avatar className="cursor-pointer">
                 <Avatar.Image
-                  alt={user?.name}
-                  src={user?.image}
+                  alt={user.name}
+                  src={user.image}
                   referrerPolicy="no-referrer"
                 />
-
                 <Avatar.Fallback>
-                  {user?.name?.charAt(0)}
+                  {user.name?.charAt(0)?.toUpperCase()}
                 </Avatar.Fallback>
               </Avatar>
 
-              <Button
-                variant="danger"
-                onClick={handleDelete}
-              >
-                LogOut
+              <Button variant="danger" onClick={handleDelete}>
+                Logout
               </Button>
-
             </div>
           ) : (
-            navItemsRight.map((navItemRight, index) => (
-              <Link href={navItemRight.href} key={index}>
-                {navItemRight.children}
+            navItemsRight.map((item, index) => (
+              <Link
+                href={item.href}
+                key={index}
+                className="hover:text-primary transition-colors"
+              >
+                {item.children}
               </Link>
             ))
           )}
         </div>
       </div>
 
-      {/* Overlay */}
+      {/* Mobile Overlay */}
       <div
         onClick={() => setMenuOpen(false)}
-        className={`lg:hidden fixed inset-0 bg-black/40 transition-opacity duration-300 z-40 ${
-          menuOpen
-            ? "opacity-100 visible"
-            : "opacity-0 invisible"
+        className={`lg:hidden fixed inset-0 bg-black/50 transition-opacity duration-300 z-40 ${
+          menuOpen ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
       />
 
-      {/* Mobile Sidebar Menu */}
+      {/* Mobile Sidebar */}
       <div
         className={`lg:hidden fixed top-0 right-0 h-screen w-72 bg-white shadow-2xl p-6 font-semibold flex flex-col gap-5 transition-transform duration-300 z-50 ${
-          menuOpen
-            ? "translate-x-0"
-            : "translate-x-full"
+          menuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-
-        {/* Top */}
+        {/* Mobile Header */}
         <div className="flex justify-between items-center border-b pb-4">
-
           <Image
             src="/assets/Wanderlast.png"
-            alt="Logo"
+            alt="Wanderlast Logo"
             width={120}
             height={120}
           />
-
           <button onClick={() => setMenuOpen(false)}>
             <HiX size={28} />
           </button>
         </div>
 
-        {/* Nav Links */}
+        {/* Mobile Nav Links */}
         <div className="flex flex-col gap-5 mt-4">
-
-          {navItemsLeft.map((navItemLeft, index) => (
+          {navItemsLeft.map((item, index) => (
             <Link
-              href={navItemLeft.href}
+              href={item.href}
               key={index}
               onClick={() => setMenuOpen(false)}
+              className="py-2 hover:text-primary transition-colors"
             >
-              {navItemLeft.children}
+              {item.children}
             </Link>
           ))}
-
         </div>
 
-        {/* Bottom */}
+        {/* Mobile Auth Section */}
         <div className="border-t pt-5 mt-auto flex flex-col gap-5">
-
-          {user ? (
+          {isLoading ? (
+            <div className="space-y-4">
+              <div className="h-10 bg-gray-200 animate-pulse rounded-md"></div>
+              <div className="h-10 bg-gray-200 animate-pulse rounded-md"></div>
+            </div>
+          ) : user ? (
             <>
               <div className="flex items-center gap-3">
-
                 <Avatar>
                   <Avatar.Image
-                    alt={user?.name}
-                    src={user?.image}
+                    alt={user.name}
+                    src={user.image}
                     referrerPolicy="no-referrer"
                   />
-
                   <Avatar.Fallback>
-                    {user?.name?.charAt(0)}
+                    {user.name?.charAt(0)?.toUpperCase()}
                   </Avatar.Fallback>
                 </Avatar>
-
-                <Link href='/profile'>Profile</Link>
+                <Link href="/profile" onClick={() => setMenuOpen(false)}>
+                  Profile
+                </Link>
               </div>
 
-              <Button
-                variant="danger"
-                onClick={handleDelete}
-              >
-                LogOut
+              <Button variant="danger" onClick={handleDelete}>
+                Logout
               </Button>
             </>
           ) : (
-            navItemsRight.map((navItemRight, index) => (
+            navItemsRight.map((item, index) => (
               <Link
-                href={navItemRight.href}
+                href={item.href}
                 key={index}
                 onClick={() => setMenuOpen(false)}
+                className="py-2 hover:text-primary transition-colors"
               >
-                {navItemRight.children}
+                {item.children}
               </Link>
             ))
           )}
-
         </div>
       </div>
     </>

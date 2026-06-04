@@ -20,9 +20,12 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${josefinSans.className} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col"
+      suppressHydrationWarning={true}
+      >
         <Navbar/>
         <main className="w-11/12 mx-auto">
+        
         {children}
         </main>
         <Footer/>

@@ -11,17 +11,28 @@ import { LuMapPin } from "react-icons/lu";
 const DestinationDetailsPage = async ({ params }) => {
   const { id } = await params;
 
-  const {token} = await auth.api.getToken({
-    headers: await headers()
+  console.log(id)
+  const requestHeaders = await headers();
+  const tokenResponse = await auth.api.getToken({
+    headers: requestHeaders,
   });
+  const token = tokenResponse?.token;
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/destination/${id}`,{
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/destination/${id}`,
+    {
+      headers: token
+        ? {
+            Authorization: `Bearer ${token}`,
+          }
+        : undefined,
+      cache: "no-store",
     }
   );
+
+  if (!res.ok) {
+    throw new Error(`Failed to load destination ${id}`);
+  }
 
   const destination = await res.json();
 
@@ -36,7 +47,7 @@ const DestinationDetailsPage = async ({ params }) => {
 
       <div className="space-y-6">
         <Image
-          src={imageUrl}
+          src={imageUrl} 
           alt={destinationName}
           width={1200}
           height={1200}

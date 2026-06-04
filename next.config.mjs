@@ -1,12 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-
-  reactCompiler: true,
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**'
+        hostname: '**',           // সব ডোমেইন allow (ডেভেলপমেন্টের জন্য)
+      },
+      {
+        protocol: 'http',
+        hostname: '**',
       },
     ],
   },
