@@ -16,8 +16,6 @@ const UserBookingCancelCard = ({ booking }) => {
       `${process.env.NEXT_PUBLIC_SERVER_URL}/booking/${_id}`,
       {
         method: "DELETE",
-      },
-      {
         headers: {
           Authorization: `Bearer ${tokenData?.token}`,
         },
@@ -28,6 +26,8 @@ const UserBookingCancelCard = ({ booking }) => {
 
     if (data.deletedCount > 0) {
       router.refresh();
+    } else {
+      console.error("Failed to cancel booking", data);
     }
   };
 
