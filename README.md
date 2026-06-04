@@ -134,6 +134,7 @@ This project is optimized for deployment on **Vercel**.
 ## 📄 License
 This project has no License.
 
+
 ## 📸 Project Gallery
 Below are all the screenshots of the Wanderlast platform:
 
