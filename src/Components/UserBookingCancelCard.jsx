@@ -3,8 +3,7 @@
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@heroui/react";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast"; // ✅ import toast
-
+import { toast } from "react-toastify";
 const UserBookingCancelCard = ({ booking }) => {
   const router = useRouter();
   const { destinationName, _id } = booking;
@@ -26,8 +25,8 @@ const UserBookingCancelCard = ({ booking }) => {
 
     if (data.deletedCount > 0) {
       toast.success("Booking canceled successfully!");
-      router.refresh();       // ✅ triggers server component re-fetch
-      router.push(router.asPath ?? "/bookings"); // fallback if refresh doesn't work
+      router.refresh();       
+      router.push(router.asPath ?? "/bookings"); 
     } else {
       toast.error("Failed to cancel booking.");
       console.error("Failed to cancel booking", data);
