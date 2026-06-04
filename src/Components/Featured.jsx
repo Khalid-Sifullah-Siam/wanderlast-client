@@ -5,7 +5,12 @@ import { FaArrowRightLong } from "react-icons/fa6";
 
 const Featured = async() => {
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/featured-destinations`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/featured-destinations`, {
+        cache: "no-store",
+    });
+    if (!res.ok) {
+        throw new Error(`Failed to fetch featured destinations: ${res.status}`);
+    }
     const destinations = await res.json();
     return (
         <div className="space-y-4 py-20 text-center">

@@ -1,9 +1,15 @@
 import DestinationCard from "@/Components/DestinationCard";
 
+export const dynamic = "force-dynamic";
 
 const ALlDestinationsPage = async() => {
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/destinations`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/destinations`, {
+        cache: "no-store",
+    });
+    if (!res.ok) {
+        throw new Error(`Failed to fetch destinations: ${res.status}`);
+    }
     const destinations = await res.json();
     
 
