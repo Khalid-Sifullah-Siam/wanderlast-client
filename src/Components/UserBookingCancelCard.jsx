@@ -25,6 +25,7 @@ const UserBookingCancelCard = ({ booking }) => {
     const data = await res.json();
 
     if (data.deletedCount > 0) {
+      toast.success("Booking canceled successfully!");
       router.refresh();
     } else {
       console.error("Failed to cancel booking", data);

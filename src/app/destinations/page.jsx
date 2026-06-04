@@ -7,7 +7,7 @@ const ALlDestinationsPage = async() => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/destinations`, {
         cache: "no-store",
     });
-    const destinations = res.ok ? await res.json() : [];
+    const destinations = res.ok ? await res.json() : null;
     
 
     return (
@@ -17,8 +17,10 @@ const ALlDestinationsPage = async() => {
 
 <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 ">
             {
-                destinations.length > 0 ? destinations.map((destination) => <DestinationCard key={destination._id} destination={destination} />) : (
-                    <p className="text-muted">No destinations found.</p>
+                !destinations ? (
+                    <p className="text-muted">Destinations could not be loaded because the server API is not responding.</p>
+                ) : destinations.length > 0 ? destinations.map((destination) => <DestinationCard key={destination._id} destination={destination} />) : (
+                    <p className="text-muted">No destinations have been added yet.</p>
                 )
             }
             </div>
