@@ -1,28 +1,22 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import {
-  Button,
-  Input,
-  Listbox,
-  ListboxItem,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  Select,
-  SelectItem,
-  Textarea,
-} from "@heroui/react";
 import { BiEdit } from "react-icons/bi";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "react-toastify";
+import {
+  Button,
+  Input,
+  Label,
+  ListBox,
+  Modal,
+  Select,
+  Surface,
+  TextArea,
+  TextField,
+} from "@heroui/react";
 
 const EditModal = ({ destination }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
   const router = useRouter();
   const {
     imageUrl,
@@ -58,7 +52,6 @@ const EditModal = ({ destination }) => {
       );
 
       if (res.ok) {
-        setIsOpen(false);
         router.refresh();
         toast.success("Destination updated successfully!");
       } else {
@@ -71,121 +64,166 @@ const EditModal = ({ destination }) => {
   };
 
   return (
-    <>
-      <Button
-        onPress={() => setIsOpen(true)}
-        variant="ghost"
-        className="rounded-none border-2 bg-transparent"
-      >
+    <Modal>
+      <Button variant="ghost" className="rounded-none border-2 bg-transparent">
         <BiEdit />
         Edit
       </Button>
 
-      <Modal isOpen={isOpen} onOpenChange={setIsOpen} size="2xl">
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader>Edit Destination</ModalHeader>
-              <form onSubmit={onSubmit} className="flex flex-col">
-                <ModalBody className="p-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="md:col-span-2">
-                      <Input
-                        name="destinationName"
-                        label="Destination Name"
-                        isRequired
-                        defaultValue={destinationName}
-                        variant="bordered"
-                      />
-                    </div>
+      <Modal.Backdrop>
+        <Modal.Container placement="auto">
+          <Modal.Dialog className="sm:max-w-2xl">
+            <Modal.CloseTrigger />
 
-                    <Input
-                      name="country"
-                      label="Country"
-                      isRequired
-                      defaultValue={country}
-                      variant="bordered"
-                    />
+            <Modal.Header>
+              <Modal.Icon className="bg-accent-soft text-accent-soft-foreground">
+                <BiEdit className="size-5" />
+              </Modal.Icon>
+              <Modal.Heading>Edit Destination</Modal.Heading>
+              <p className="mt-1.5 text-sm leading-5 text-muted">
+                Update the destination details below and save your changes.
+              </p>
+            </Modal.Header>
 
-                    <Select
-                      name="category"
-                      label="Category"
-                      isRequired
-                      defaultSelectedKeys={[category]}
-                      variant="bordered"
-                    >
-                      <SelectItem key="Beach">Beach</SelectItem>
-                      <SelectItem key="Mountain">Mountain</SelectItem>
-                      <SelectItem key="City">City</SelectItem>
-                      <SelectItem key="Adventure">Adventure</SelectItem>
-                      <SelectItem key="Cultural">Cultural</SelectItem>
-                      <SelectItem key="Luxury">Luxury</SelectItem>
-                    </Select>
+            <Modal.Body className="p-6">
+              <Surface variant="default">
+                <form
+                  id="edit-destination-form"
+                  onSubmit={onSubmit}
+                  className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                >
+                  <TextField
+                    className="w-full md:col-span-2"
+                    name="destinationName"
+                    type="text"
+                    variant="secondary"
+                    isRequired
+                    defaultValue={destinationName}
+                  >
+                    <Label>Destination Name</Label>
+                    <Input placeholder="Enter destination name" />
+                  </TextField>
 
-                    <Input
-                      name="price"
-                      label="Price"
-                      type="number"
-                      isRequired
-                      defaultValue={price}
-                      variant="bordered"
-                    />
+                  <TextField
+                    className="w-full"
+                    name="country"
+                    type="text"
+                    variant="secondary"
+                    isRequired
+                    defaultValue={country}
+                  >
+                    <Label>Country</Label>
+                    <Input placeholder="Enter country" />
+                  </TextField>
 
-                    <Input
-                      name="duration"
-                      label="Duration"
-                      isRequired
-                      defaultValue={duration}
-                      variant="bordered"
-                    />
+                  <Select
+                    name="category"
+                    defaultSelectedKeys={[category]}
+                    placeholder="Select category"
+                  >
+                    <Label>Category</Label>
+                    <Select.Trigger>
+                      <Select.Value />
+                      <Select.Indicator />
+                    </Select.Trigger>
+                    <Select.Content>
+                      <ListBox>
+                        <ListBox.Item id="Beach" textValue="Beach">
+                          Beach <ListBox.ItemIndicator />
+                        </ListBox.Item>
+                        <ListBox.Item id="Mountain" textValue="Mountain">
+                          Mountain <ListBox.ItemIndicator />
+                        </ListBox.Item>
+                        <ListBox.Item id="City" textValue="City">
+                          City <ListBox.ItemIndicator />
+                        </ListBox.Item>
+                        <ListBox.Item id="Adventure" textValue="Adventure">
+                          Adventure <ListBox.ItemIndicator />
+                        </ListBox.Item>
+                        <ListBox.Item id="Cultural" textValue="Cultural">
+                          Cultural <ListBox.ItemIndicator />
+                        </ListBox.Item>
+                        <ListBox.Item id="Luxury" textValue="Luxury">
+                          Luxury <ListBox.ItemIndicator />
+                        </ListBox.Item>
+                      </ListBox>
+                    </Select.Content>
+                  </Select>
 
-                    <div className="md:col-span-2">
-                      <Input
-                        name="departureDate"
-                        label="Departure Date"
-                        type="date"
-                        isRequired
-                        defaultValue={departureDate}
-                        variant="bordered"
-                      />
-                    </div>
+                  <TextField
+                    className="w-full"
+                    name="price"
+                    type="number"
+                    variant="secondary"
+                    isRequired
+                    defaultValue={price}
+                  >
+                    <Label>Price</Label>
+                    <Input placeholder="Enter price" />
+                  </TextField>
 
-                    <div className="md:col-span-2">
-                      <Input
-                        name="imageUrl"
-                        label="Image URL"
-                        isRequired
-                        defaultValue={imageUrl}
-                        variant="bordered"
-                      />
-                    </div>
+                  <TextField
+                    className="w-full"
+                    name="duration"
+                    type="text"
+                    variant="secondary"
+                    isRequired
+                    defaultValue={duration}
+                  >
+                    <Label>Duration</Label>
+                    <Input placeholder="e.g. 7 days" />
+                  </TextField>
 
-                    <div className="md:col-span-2">
-                      <Textarea
-                        name="description"
-                        label="Description"
-                        isRequired
-                        defaultValue={description}
-                        variant="bordered"
-                      />
-                    </div>
-                  </div>
-                </ModalBody>
+                  <TextField
+                    className="w-full md:col-span-2"
+                    name="departureDate"
+                    type="date"
+                    variant="secondary"
+                    isRequired
+                    defaultValue={departureDate}
+                  >
+                    <Label>Departure Date</Label>
+                    <Input />
+                  </TextField>
 
-                <ModalFooter>
-                  <Button variant="light" onPress={onClose}>
-                    Cancel
-                  </Button>
-                  <Button color="primary" type="submit">
-                    Save Changes
-                  </Button>
-                </ModalFooter>
-              </form>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
-    </>
+                  <TextField
+                    className="w-full md:col-span-2"
+                    name="imageUrl"
+                    type="text"
+                    variant="secondary"
+                    isRequired
+                    defaultValue={imageUrl}
+                  >
+                    <Label>Image URL</Label>
+                    <Input placeholder="Enter image URL" />
+                  </TextField>
+
+                  <TextField
+                    className="w-full md:col-span-2"
+                    name="description"
+                    variant="secondary"
+                    isRequired
+                    defaultValue={description}
+                  >
+                    <Label>Description</Label>
+                    <TextArea placeholder="Enter description" />
+                  </TextField>
+                </form>
+              </Surface>
+            </Modal.Body>
+
+            <Modal.Footer>
+              <Button slot="close" variant="secondary">
+                Cancel
+              </Button>
+              <Button type="submit" form="edit-destination-form">
+                Save Changes
+              </Button>
+            </Modal.Footer>
+          </Modal.Dialog>
+        </Modal.Container>
+      </Modal.Backdrop>
+    </Modal>
   );
 };
 
