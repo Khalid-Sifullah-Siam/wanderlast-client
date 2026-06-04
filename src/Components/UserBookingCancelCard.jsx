@@ -1,13 +1,13 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
-import { Button, Chip } from "@heroui/react";
-import { AlertDialog } from "@heroui/react";
+import { Button } from "@heroui/react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast"; // ✅ import toast
 
 const UserBookingCancelCard = ({ booking }) => {
   const router = useRouter();
-  const { imageUrl, destinationName, departureDate, _id, price } = booking;
+  const { destinationName, _id } = booking;
 
   const handleDelete = async () => {
     const { data: tokenData } = await authClient.token();
@@ -19,52 +19,35 @@ const UserBookingCancelCard = ({ booking }) => {
         headers: {
           Authorization: `Bearer ${tokenData?.token}`,
         },
-      },
+      }
     );
 
     const data = await res.json();
 
     if (data.deletedCount > 0) {
       toast.success("Booking canceled successfully!");
-      router.refresh();
+      router.refresh();       // ✅ triggers server component re-fetch
+      router.push(router.asPath ?? "/bookings"); // fallback if refresh doesn't work
     } else {
+      toast.error("Failed to cancel booking.");
       console.error("Failed to cancel booking", data);
     }
   };
 
+  const handleConfirm = () => {
+    if (window.confirm(`Delete ${destinationName} permanently? This cannot be undone.`)) {
+      handleDelete();
+    }
+  };
+
   return (
-    <AlertDialog>
-      <Button
-        variant="danger"
-        className="rounded-none border-2 bg-transparent text-red-500"
-      >
-        Cancel
-      </Button>
-      <AlertDialog.Backdrop>
-        <AlertDialog.Container>
-          <AlertDialog.Dialog className="sm:max-w-[400px]">
-            <AlertDialog.CloseTrigger />
-            <AlertDialog.Header>
-              <AlertDialog.Icon status="danger" />
-              <AlertDialog.Heading>
-                Delete {destinationName} permanently?
-              </AlertDialog.Heading>
-            </AlertDialog.Header>
-            <AlertDialog.Body>
-              <p>
-                This will permanently delete <strong>{destinationName}</strong>{" "}
-                and all of its data. This action cannot be undone.
-              </p>
-            </AlertDialog.Body>
-            <AlertDialog.Footer>
-              <Button slot="close" variant="danger" onClick={handleDelete}>
-                Cancel
-              </Button>
-            </AlertDialog.Footer>
-          </AlertDialog.Dialog>
-        </AlertDialog.Container>
-      </AlertDialog.Backdrop>
-    </AlertDialog>
+    <Button
+      onClick={handleConfirm}
+      variant="bordered"
+      className="rounded-none border-2 border-red-500 bg-transparent text-red-500"
+    >
+      Cancel
+    </Button>
   );
 };
 
