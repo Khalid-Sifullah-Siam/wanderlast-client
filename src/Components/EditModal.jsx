@@ -55,7 +55,7 @@ const EditModal = ({ destination }) => {
 
       if (res.ok) {
         router.refresh();
-        toast.success("Destination updated successfully!");
+        toast.success("Destination details updated successfully!");
         setIsOpen(false);
       } else {
         toast.error("Failed to update destination.");
