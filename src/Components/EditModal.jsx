@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { BiEdit } from "react-icons/bi";
 import { authClient } from "@/lib/auth-client";
@@ -17,6 +18,7 @@ import {
 } from "@heroui/react";
 
 const EditModal = ({ destination }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const {
     imageUrl,
@@ -54,6 +56,7 @@ const EditModal = ({ destination }) => {
       if (res.ok) {
         router.refresh();
         toast.success("Destination updated successfully!");
+        setIsOpen(false);
       } else {
         toast.error("Failed to update destination.");
       }
@@ -64,8 +67,12 @@ const EditModal = ({ destination }) => {
   };
 
   return (
-    <Modal>
-      <Button variant="ghost" className="rounded-none border-2 bg-transparent">
+    <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
+      <Button
+        onPress={() => setIsOpen(true)}
+        variant="ghost"
+        className="rounded-none border-2 bg-transparent"
+      >
         <BiEdit />
         Edit
       </Button>
@@ -126,7 +133,7 @@ const EditModal = ({ destination }) => {
                       <Select.Value />
                       <Select.Indicator />
                     </Select.Trigger>
-                    <Select.Content>
+                    <Select.Popover>
                       <ListBox>
                         <ListBox.Item id="Beach" textValue="Beach">
                           Beach <ListBox.ItemIndicator />
@@ -147,7 +154,7 @@ const EditModal = ({ destination }) => {
                           Luxury <ListBox.ItemIndicator />
                         </ListBox.Item>
                       </ListBox>
-                    </Select.Content>
+                    </Select.Popover>
                   </Select>
 
                   <TextField

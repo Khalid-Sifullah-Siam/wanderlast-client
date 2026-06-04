@@ -3,6 +3,8 @@
 
 import { authClient } from "@/lib/auth-client";
 import { FieldError, Input, Label, TextField, Select, ListBox, TextArea, Button } from "@heroui/react";
+import { redirect } from "next/navigation";
+import { toast } from "react-toastify";
 
 
 const AddDestinationPage = () => {
@@ -24,6 +26,10 @@ const AddDestinationPage = () => {
         })
 
        const data = await res.json();
+
+       toast.success("Destination added successfully!");
+
+       redirect('/destinations')
     }
 
 

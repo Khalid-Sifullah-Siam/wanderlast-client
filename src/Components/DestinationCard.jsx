@@ -5,7 +5,7 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import { HiArrowTopRightOnSquare } from "react-icons/hi2";
 import { LuMapPin } from "react-icons/lu";
 
-const DestinationCard = ({ destination }) => {
+const DestinationCard = ({destination}) => {
   const { imageUrl, price, destinationName, duration, country, _id } = destination;
 
   return (
