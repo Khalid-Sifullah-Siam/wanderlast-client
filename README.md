@@ -28,6 +28,7 @@ Check out the live project: [Github Repository](https://github.com/Khalid-Sifull
 - ↕️ **Sort Options**: Sort destinations and booking lists alphabetically A-Z or Z-A.
 - �📅 **Trip Management**: Easily book slots and manage your personal travel itinerary.
 - 👤 **User Profile**: Dedicated dashboard to view and update personal travel history.
+- ⏳ **Polished Loading UI**: Dual spinner rings, pulse rings, floating particles, shimmer text, bouncing dots, dark theme
 - 📱 **Fully Responsive**: Crafted with Tailwind CSS v4 for a pixel-perfect experience on all devices.
 - 🚀 **Modern Tech Stack**: Leveraging Next.js 16 and React 19 for industry-leading performance.
 - 🔔 **Interactive Feedback**: Real-time notifications for bookings and updates via `react-toastify`.
